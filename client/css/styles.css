@@ -1,4 +1,8 @@
 .input-group {
-	width: 80%;
-	
+	width: 80%;	
+}
+.text-center {
+	font-family: Futura;
+	font-size: 44px;
+	color: #036687;
 }

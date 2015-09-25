@@ -64,9 +64,9 @@ function handleRequests(req, res) {
 function writeTweet(tweet, res) {
     if(tweet.text && tweet.userName) {
         console.log(tweet);
-        fs.appendFile(__dirname + '/messages.txt', JSON.stringify(tweet), function(err){
+        fs.appendFile(__dirname + '/messages.txt', '\n' + JSON.stringify(tweet)+'\n', function(err){
             console.log(err);
-            res.writeHead(200);
+            res.writeHead(201);
             res.end();
         });
     } else {
@@ -77,21 +77,34 @@ function writeTweet(tweet, res) {
 }
 
 function readFile(filePath, header, res) {
-    
     var file = path.join(__dirname, filePath);
-      fs.readFile(file, function (err, data) {
-        var statusCode = statusCode || 200;
-        res.writeHead(statusCode, header);
-        res.end(data);
-      });
+    fs.readFile(file, function (err, data) {
+        if(err) {
+            var statusCode = statusCode || 404;
+            res.writeHead(statusCode, header);
+            res.end(data);
+        } else {
+            var statusCode = statusCode || 200;
+            res.writeHead(statusCode, header);
+            res.end(data);
+            }
+    });
 }
 
 module.exports = {
     handleRequests: handleRequests
 };
 
-//create module to handle routes
-/*createServer takens in a function to handle requests. Here is where you can
+/*
+function readFile(filePath, header, res) {
+    var file = path.join(__dirname, filePath);
+      fs.readFile(file, function (err, data) {
+        var statusCode = statusCode || 200;
+        res.writeHead(statusCode, header);
+        res.end(data);
+      });
+
+createServer takens in a function to handle requests. Here is where you can
 create a handler for get and post requests. Note: req(request) and res(response)
 come from node's http module. They include both incoming information like urls
 and outgoing like content */
